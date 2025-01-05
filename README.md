@@ -27,7 +27,9 @@ pip install -r ./back_end/manager/requirements.txt
 ```
 2. Configurando a API:
 ```
-TODO
+conda create --name prisma-api python=3.12 --yes
+conda activate prisma-api
+pip install -r ./back_end/api/requirements.txt
 ```
 3. Executando serviço:
 No folder `back_end/compose`:
