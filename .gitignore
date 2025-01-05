@@ -1,2 +1,4 @@
-# */compose/.env
+*.env
 */manager/app/gen-lang*.json
+*/__pycache__/*
+*.pyc

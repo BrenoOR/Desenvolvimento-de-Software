@@ -1,5 +1,5 @@
 services:
-  manager:
+  chat-manager:
     build:
       context: ../manager
     command: python app/main.py
