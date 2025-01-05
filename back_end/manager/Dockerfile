@@ -8,6 +8,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Set container port
 EXPOSE 50051
+EXPOSE 50080
 
 # Update environment
 RUN apt-get -y update

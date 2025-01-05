@@ -5,6 +5,7 @@ services:
     command: python app/main.py
     ports:
       - "50051:50051"
+      - "50080:50080"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_ORG_ID=${OPENAI_ORG_ID}

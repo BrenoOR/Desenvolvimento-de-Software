@@ -1,8 +1,13 @@
 import os
 import time
 import logging
+import threading
 from concurrent import futures
+
 import grpc
+from grpc_health.v1 import health, health_pb2, health_pb2_grpc
+from py_grpc_prometheus.prometheus_server_interceptor import PromServerInterceptor
+from prometheus_client import start_http_server
 
 from server.proto.message_pb2 import (
     RequestAIChat,
@@ -15,6 +20,7 @@ from server.proto.message_pb2_grpc import (
 
 from ai.gemini_service import GeminiService
 
+_ONE_DAY_IN_SECONDS = 60 * 60 * 24
 logger = logging.getLogger()
 
 class RPCServer(ChatManagerServicer):
@@ -28,12 +34,13 @@ class RPCServer(ChatManagerServicer):
     def start(self):
         """Starts the RPC server."""
         start = time.time()
-        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        server = grpc.server(futures.ThreadPoolExecutor(), interceptors=(PromServerInterceptor(),))
         
         add_ChatManagerServicer_to_server(self, server)
         # server.add_secure_port('[::]:50051', grpc.local_server_credentials())
         server.add_insecure_port(f"[::]:{os.getenv('PORT', 50051)}")
         server.start()
+        start_http_server(50080)
         logger.info("RPC server started in %s seconds.", time.time() - start)
         server.wait_for_termination()
 
