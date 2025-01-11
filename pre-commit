@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Running back_end lint"
+black .\back_end\
+flake8 .\back_end\ --config .\back_end\setup.cfg

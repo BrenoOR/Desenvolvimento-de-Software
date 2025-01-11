@@ -11,8 +11,10 @@ import google.generativeai as genai
 
 logger = logging.getLogger()
 
+
 class GeminiService:
     """Class representing the Gemini AI service."""
+
     def config(self):
         """Configures the Gemini AI service."""
         genai.configure(api_key=get_secret(SECRET_GEMINI))
@@ -27,4 +29,3 @@ class GeminiService:
         logger.info(f"Body: {body}")
         response = self.get_model().generate_content(body).text
         return response
-    

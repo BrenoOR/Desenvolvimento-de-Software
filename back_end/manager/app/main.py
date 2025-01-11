@@ -7,10 +7,12 @@ from server.server import RPCServer
 fileConfig("app/log.ini")
 logger = logging.getLogger()
 
+
 def main():
     logger.info("Starting Manager service.")
     rpc_server = RPCServer()
     rpc_server.start()
+
 
 if __name__ == "__main__":
     try:

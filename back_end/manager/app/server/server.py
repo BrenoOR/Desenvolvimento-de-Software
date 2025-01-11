@@ -6,16 +6,15 @@ from concurrent import futures
 
 import grpc
 from grpc_health.v1 import health, health_pb2, health_pb2_grpc
-from py_grpc_prometheus.prometheus_server_interceptor import PromServerInterceptor
+from py_grpc_prometheus.prometheus_server_interceptor import (
+    PromServerInterceptor,
+)
 from prometheus_client import start_http_server
 
-from server.proto.message_pb2 import (
-    RequestAIChat,
-    AIResponse
-)
+from server.proto.message_pb2 import RequestAIChat, AIResponse
 from server.proto.message_pb2_grpc import (
     ChatManagerServicer,
-    add_ChatManagerServicer_to_server
+    add_ChatManagerServicer_to_server,
 )
 
 from ai.gemini_service import GeminiService
@@ -23,8 +22,10 @@ from ai.gemini_service import GeminiService
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 logger = logging.getLogger()
 
+
 class RPCServer(ChatManagerServicer):
     """Class representing the RPC server for the ChatManager service."""
+
     gemini_service = None
 
     def __init__(self):
@@ -34,8 +35,11 @@ class RPCServer(ChatManagerServicer):
     def start(self):
         """Starts the RPC server."""
         start = time.time()
-        server = grpc.server(futures.ThreadPoolExecutor(), interceptors=(PromServerInterceptor(),))
-        
+        server = grpc.server(
+            futures.ThreadPoolExecutor(),
+            interceptors=(PromServerInterceptor(),),
+        )
+
         add_ChatManagerServicer_to_server(self, server)
         # server.add_secure_port('[::]:50051', grpc.local_server_credentials())
         server.add_insecure_port(f"[::]:{os.getenv('PORT', 50051)}")
@@ -52,7 +56,7 @@ class RPCServer(ChatManagerServicer):
         message = self.gemini_service.process_request(body)
         logger.info("Processed request in %s seconds.", time.time() - start)
         return AIResponse(message=message)
-    
+
     def generate_body(self, request: RequestAIChat) -> str:
         """Generates the body of the request to be sent to the AI service."""
         prefix = f"Responda a mensagem como se fosse responder o usuário _{request.user_name}_({request.user_id}),"

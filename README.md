@@ -20,25 +20,25 @@ A proposta é criar um aplicativo inclusivo para conectar pessoas neurodiversas,
 ### Primeiros passos:
 #### Windows
 1. Configurando o ambiente do Manager: 
-```
+```bash
 conda create --name prisma-manager python=3.12 --yes
 conda activate prisma-manager
 pip install -r ./back_end/manager/requirements.txt
 ```
 2. Configurando a API:
-```
+```bash
 conda create --name prisma-api python=3.12 --yes
 conda activate prisma-api
 pip install -r ./back_end/api/requirements.txt
 ```
 3. Executando serviço:
 No folder `back_end/compose`:
-```
+```bash
 docker compose up --build
 ```
 4. Testando ativamente o serviço:
 No folder `back_end/test`
-```
+```bash
 conda activate prisma-manager
 python test.py
 ```
@@ -57,6 +57,9 @@ Por hora não existe uma biblioteca onde tanto Manager quanto Client possam usar
 Caso tenha necessidade de modificar e atualizar, é preciso atualizar ambos.
 Para atualizar:
 1. Vá para o folder base do projeto que irá usar os protobufs. O Manager por exemplo é: `/back_end/manager/app/`
-2. Execute: `python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. .\server\proto\message.proto`
+2. Execute:
+```bash
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. .\server\proto\message.proto
+```
 
 TODO: Ajustar Protobufs para que todo o projeto tenha acesso à mesma lib.

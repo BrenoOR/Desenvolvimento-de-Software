@@ -15,6 +15,8 @@ services:
       - PORT=8000
     volumes:
       - ../api/app/:/usr/src/app/
+    networks:
+      - back_end
   chat-manager:
     build:
       context: ../manager
@@ -31,3 +33,18 @@ services:
       - HOST=localhost
       - PORT=50051
     restart: always
+    networks:
+      - back_end
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+    networks:
+      - back_end
+networks:
+  back_end:
+    driver: bridge
