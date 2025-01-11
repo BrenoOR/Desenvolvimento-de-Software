@@ -14,7 +14,13 @@ class RequestAIChat(_message.Message):
     user_name: str
     context: str
     message: str
-    def __init__(self, user_id: _Optional[str] = ..., user_name: _Optional[str] = ..., context: _Optional[str] = ..., message: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        user_id: _Optional[str] = ...,
+        user_name: _Optional[str] = ...,
+        context: _Optional[str] = ...,
+        message: _Optional[str] = ...,
+    ) -> None: ...
 
 class AIResponse(_message.Message):
     __slots__ = ("message",)
