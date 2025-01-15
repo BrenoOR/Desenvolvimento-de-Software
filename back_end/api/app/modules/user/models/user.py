@@ -1,5 +1,6 @@
 """Classes related to User."""
 
+from datetime import datetime
 from typing import List
 from pydantic import Field
 
@@ -39,8 +40,12 @@ class User(BaseModel):
     is_superuser: bool = Field(
         None, title="Superuser", description="User is superuser."
     )
-    created_at: str = Field(None, title="Created at", description="User creation date.")
-    updated_at: str = Field(None, title="Updated at", description="User update date.")
+    created_at: datetime = Field(
+        None, title="Created at", description="User creation date."
+    )
+    updated_at: datetime = Field(
+        None, title="Updated at", description="User update date."
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

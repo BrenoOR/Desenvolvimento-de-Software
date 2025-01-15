@@ -1,5 +1,6 @@
 """Classes related to Hyperfocus."""
 
+from datetime import datetime
 from typing import List
 from pydantic import Field
 
@@ -27,9 +28,9 @@ class HyperFocus(BaseModel):
     users: List[str] = Field(
         None, title="Users", description="Users with this Hyperfocus."
     )
-    created_at: str = Field(
+    created_at: datetime = Field(
         None, title="Created at", description="Hyperfocus creation date."
     )
-    updated_at: str = Field(
+    updated_at: datetime = Field(
         None, title="Updated at", description="Hyperfocus update date."
     )

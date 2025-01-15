@@ -1,7 +1,10 @@
 """Classes and functions used in all modules."""
 
+from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel as Base
 from uuid import uuid4
+
+BaseDB = declarative_base()
 
 
 def generate_id() -> str:
