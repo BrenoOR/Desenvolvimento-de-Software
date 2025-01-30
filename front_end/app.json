@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "prisma",
+    "slug": "prisma",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/iphone-icon.png",
+    "scheme": "prisma",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/android-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icons/prism.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#ffffff",
+          "enableFullScreenImage_Legacy": true
+
+
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "custom": {
+            "Montserrat-Bold": "./assets/fonts/Montserrat-Bold.ttf",
+            "Montserrat-Italic": "./assets/fonts/Montserrat-Italic.ttf",
+            "Montserrat-Light": "./assets/fonts/Montserrat-Light.ttf",
+            "Montserrat-Medium": "./assets/fonts/Montserrat-Medium.ttf",
+            "Montserrat-Regular": "./assets/fonts/Montserrat-Regular.ttf",
+            "Montserrat-SemiBold": "./assets/fonts/Montserrat-SemiBold.ttf"
+          }
+        }
+      ]
+      
+    ],
+      "experiments": {
+        "typedRoutes": true
+      }
+    }
+}
