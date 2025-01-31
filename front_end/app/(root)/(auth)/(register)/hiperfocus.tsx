@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import icons from '@/constants/icons'
-import { Link } from 'expo-router'
+import Link from 'expo-router/link'
 import FormField from '@/components/FormField.jsx'
 
 const Hiperfocus = () => {
@@ -12,7 +12,7 @@ const Hiperfocus = () => {
     })
   return (
     <SafeAreaView className='h-full'>
-      <ScrollView contentContainerClassName='h-full'>
+      <ScrollView contentContainerClassName='h-screen'>
         <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]}  locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
           <View className='h-full w-full justify-start items-center p-8'>
             <View className='mb-24'>
@@ -28,7 +28,7 @@ const Hiperfocus = () => {
             />
             </View>
           </View>
-          <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center mt-40">
+          <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center">
             <Link href={"/choose-topics"}>
               <Text className="text-3xl font-bold text-black">
                 Continuar

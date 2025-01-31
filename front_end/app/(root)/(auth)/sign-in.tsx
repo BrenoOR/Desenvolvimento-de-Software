@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import icons from '@/constants/icons'
-import { Link } from 'expo-router'
+import Link from 'expo-router/link'
 import FormField from '@/components/FormField.jsx'
 
 
@@ -45,7 +45,7 @@ const SignIn = () => {
                 />
             </View>
             <TouchableOpacity className="w-64 bg-black rounded-full h-20 justify-center items-center">
-              <Link href={"/home"}>
+              <Link href={"/new-connection"}>
                 <Text className="text-2xl font-bold text-white">
                   Entrar
                 </Text>

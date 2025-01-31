@@ -43,19 +43,19 @@ const ChooseTopics = () => {
   
 
   return (
-    <SafeAreaView className='h-full'>
+    <SafeAreaView className='flex-1'>
       <ScrollView contentContainerClassName='flex-grow'>
         <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]}  locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
           <View className='flex-1 w-full justify-start items-center p-8'>
             <Image source={icons.logo} className='h-8 w-40 mb-8'/>
-            <Text className='text-7xl font-bold'>Escolha até 5 tópicos de interesse</Text>
+            <Text className='text-6xl font-bold'>Escolha até 5 tópicos de interesse</Text>
             <Text className='text-3xl self-start'>{`${selectedInterests.length}/5`}</Text>
-            <ScrollView horizontal={true} scrollEnabled={true} contentContainerClassName='h-full'>
+            <ScrollView horizontal={true} scrollEnabled={true} contentContainerClassName='h-1/2'>
               <View className='flex-row flex-wrap items-baseline w-screen'>
                 
               {interests.map((myInterest, index) => (
                 
-                <TouchableOpacity className='m-2 border border-gray-300 rounded-3xl p-3'
+                <TouchableOpacity className='m-2 border border-gray-300 rounded-3xl p-2'
                   key={index}
                   onPress={() => toggleInterest(myInterest)}
                   style={{
@@ -67,7 +67,7 @@ const ChooseTopics = () => {
           ))}
               </View>
             </ScrollView>
-            <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center">
+            <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center mt-4">
               <Link href={"/pronouns"}>
                 <Text className="text-3xl font-bold text-black">
                   Continuar
