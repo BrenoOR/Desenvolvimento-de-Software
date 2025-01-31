@@ -6,8 +6,10 @@ from fastapi.responses import JSONResponse
 from loguru import logger
 from sqlalchemy.orm import Session
 
-from modules.user.models.user import User
-from modules.user.models.hyperfocus import HyperFocus
+from modules.user.models.user import User, UserResponse
+#from modules.user.models.hyperfocus import HyperFocus
+
+database = []
 
 router = APIRouter(
     tags=["User"],
@@ -18,3 +20,11 @@ router = APIRouter(
 )
 
 env = os.environ["ENVIRONMENT"]
+
+@router.post('')
+def create_user(user: User):
+    user = User(**user.to_dict())
+    logger.info(f"Creating User with data: {user.dict()}")
+    user_response = UserResponse(**user.to_dict())
+    database.append(user)
+    return {"UserResponse": user_response}
