@@ -1,5 +1,5 @@
-import { Link } from "expo-router";
-import { View } from "react-native";
+import Link from "expo-router/link"
+import { View } from "react-native"
 
 export default function Index() {
   return (
@@ -11,7 +11,7 @@ export default function Index() {
       }}
     >
       <Link href="/welcome">Welcome</Link>
-      <Link href="/communities">Communities</Link>
+      <Link href="/new-connection">Connections</Link>
       <Link href="/profile">Profile</Link>
 
     </View>

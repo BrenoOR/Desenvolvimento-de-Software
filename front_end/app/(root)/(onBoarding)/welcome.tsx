@@ -1,19 +1,20 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import React from 'react'
-import { Link } from 'expo-router'
+import Link from 'expo-router/link'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { LinearGradient } from 'expo-linear-gradient';
-import { TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'
+import { TouchableOpacity } from 'react-native'
 
 
 import icons from '@/constants/icons'
 
 const Welcome = () => {
   return (
-    <SafeAreaView className='h-full'>
-       <ScrollView contentContainerClassName='h-full'>
+    <SafeAreaView className='flex-1'>
+       <ScrollView contentContainerClassName='flex-grow'>
         <LinearGradient colors={["#ffffff", "#FFE0C9", "#FFC3F4", "#E2CAFF", "#BBEAFF"]} start={[0,0]} end={[1,1]}>
-          <View className="h-full w-full justify-center items-center">
+          
+          <View className="flex-1 w-full justify-center items-center">
             <Image source={icons.prism} className='w-44 h-44' resizeMode='contain'/>
                 <Text className='text-4xl text-black font-regular text-center'>
                   BEM VINDO AO

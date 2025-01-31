@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import MaskedView from '@react-native-masked-view/masked-view'
 import icons from '@/constants/icons'
-import { Link } from 'expo-router'
+import Link from 'expo-router/link'
 
 
 const Benefits = () => {
