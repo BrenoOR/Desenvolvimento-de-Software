@@ -6,8 +6,8 @@ from fastapi.responses import JSONResponse
 from loguru import logger
 from sqlalchemy.orm import Session
 
-from app.modules.user.models.user import User
-from app.modules.user.models.hyperfocus import HyperFocus
+from modules.user.models.user import User
+from modules.user.models.hyperfocus import HyperFocus
 
 router = APIRouter(
     tags=["User"],
@@ -18,9 +18,3 @@ router = APIRouter(
 )
 
 env = os.environ["ENVIRONMENT"]
-
-@router.get(
-    "",
-    response_model=List[User],
-    summary="Get all users",
-)
