@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image } from 'react-native'
 import React, { useState } from 'react'
-import { Link } from 'expo-router'
+import Link from 'expo-router/link'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from 'react-native';
@@ -44,9 +44,9 @@ const ChooseTopics = () => {
 
   return (
     <SafeAreaView className='h-full'>
-      <ScrollView contentContainerClassName='h-full'>
+      <ScrollView contentContainerClassName='flex-grow'>
         <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]}  locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
-          <View className='h-full w-full justify-start items-center p-8'>
+          <View className='flex-1 w-full justify-start items-center p-8'>
             <Image source={icons.logo} className='h-8 w-40 mb-8'/>
             <Text className='text-7xl font-bold'>Escolha até 5 tópicos de interesse</Text>
             <Text className='text-3xl self-start'>{`${selectedInterests.length}/5`}</Text>

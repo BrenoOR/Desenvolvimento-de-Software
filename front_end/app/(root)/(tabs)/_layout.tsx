@@ -1,7 +1,6 @@
-import icons from '@/constants/icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs, Redirect } from 'expo-router';
-import { View, Image } from 'react-native';
+import icons from '@/constants/icons'
+import { Tabs } from 'expo-router'
+import { View, Image } from 'react-native'
 
 const TabIcon = ({icon, color, focused}:any) => {
     return(
@@ -19,15 +18,15 @@ export default function TabLayout() {
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: '#39c0fb', tabBarShowLabel: false }}>
         <Tabs.Screen
-        name="communities"
+        name="new-connection"
         options={{
-          title: 'Communities',
+          title: 'Connections',
           headerShown: false,
-          tabBarIcon: ({color, focused}) => (
+          tabBarIcon: ({color, focused}: any) => (
             <TabIcon
             icon={icons.group}
             color={color}
-            name="communities"
+            name="new-connection"
             focused={focused}
             />
           )
@@ -37,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           headerShown: false,
-          tabBarIcon: ({color, focused}) => (
+          tabBarIcon: ({color, focused}: any) => (
             <TabIcon
             icon={icons.user}
             color={color}
@@ -45,6 +44,12 @@ export default function TabLayout() {
             focused={focused}
             />
           )
+        }}/>
+        <Tabs.Screen
+        name="chat/prepare-connection"
+        options={{
+          headerShown: false,
+          href: null
         }}/>
     </Tabs>
   );

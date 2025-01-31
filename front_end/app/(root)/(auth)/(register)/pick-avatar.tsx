@@ -1,6 +1,6 @@
 import {View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import { Link } from 'expo-router'
+import Link from "expo-router/link"
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { TouchableOpacity } from 'react-native';
