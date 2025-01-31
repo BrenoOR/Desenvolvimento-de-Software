@@ -8,8 +8,11 @@ from http.client import responses
 from starlette.middleware.cors import CORSMiddleware
 from starlette_prometheus import PrometheusMiddleware
 
-from fastapi import FastAPI, Request
-from endpoints.router import router
+from sqlalchemy.orm import Session
+
+from fastapi import FastAPI, Request, Depends
+from modules.user.db.db import get_db
+from modules.router import router
 from modules import utils
 
 env = os.environ["ENVIRONMENT"]
@@ -79,7 +82,7 @@ async def log_requests(request: Request, call_next):
 
 
 @app.get(f"/{env}", tags=["Hello World"], summary="Hello World endpoint.")
-def root():
+def root(db: Session = Depends(get_db)):
     """Hello World endpoint."""
     return {"Hello": "World"}
 
