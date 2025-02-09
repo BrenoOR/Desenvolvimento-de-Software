@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: ../api
-    command: uvicorn main:app --reload --host 0.0.0.0
+    command: uvicorn app.main:app --reload --workers 4 --timeout-keep-alive 10 --host 0.0.0.0 --loop asyncio
     ports:
       - "8000:8000"
     environment:
@@ -20,7 +20,7 @@ services:
       - HOST=localhost
       - PORT=8000
     volumes:
-      - ../api/app/:/usr/src/app/
+      - ../api/:/usr/src/app/
     networks:
       - back_end
   chat-manager:

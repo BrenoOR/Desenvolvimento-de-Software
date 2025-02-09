@@ -1,11 +1,11 @@
 """Classes related to User."""
 
 from datetime import datetime
-from typing import List
+from typing import List, Any
 from pydantic import Field
 from loguru import logger
-from modules.utils import BaseModel
-from modules.utils import generate_id
+from app.modules.utils import BaseModel, DefaultResponse
+from app.modules.utils import generate_id
 
 
 class User(BaseModel):
@@ -23,14 +23,12 @@ class User(BaseModel):
         None,
         title="Email",
         description="User email.",
-#        pattern="[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
     )
     password: str = Field(
         None,
         title="Password",
         description="User password.",
         min_length=8,
-#        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,}$",
     )
     hyperfocuses: List[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
@@ -48,15 +46,53 @@ class User(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        logger.info(f"Creating User with data: {self.dict()}")
         self.user_id = generate_id()
-        logger.info(f"User ID: {self.user_id}")
         self.is_active = self.is_active if self.is_active is not None else True
         self.is_superuser = (
             self.is_superuser if self.is_superuser is not None else False
         )
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
-class UserResponse(BaseModel):
+    def update(self, data: Any):
+        for field in data:
+            if hasattr(self, field) and data[field] is not None:
+                setattr(self, field, data[field])
+        self.updated_at = datetime.now()
+
+
+class UserCreate(BaseModel):
+    username: str = Field(
+        None, title="Username", description="User name.", max_length=50
+    )
+    email: str = Field(
+        None,
+        title="Email",
+        description="User email.",
+    )
+    password: str = Field(
+        None,
+        title="Password",
+        description="User password.",
+        min_length=8,
+    )
+    hyperfocuses: List[str] = Field(
+        None, title="Hyperfocuses", description="User hyperfocuses IDs."
+    )
+    is_superuser: bool = Field(
+        None, title="Superuser", description="User is superuser."
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __eq__(self, other: User):
+        if self.username == other.username and self.email == other.email:
+            return True
+        return False
+
+
+class UserPublic(BaseModel):
     user_id: str = Field(
         None,
         title="User ID",
@@ -69,13 +105,23 @@ class UserResponse(BaseModel):
         None,
         title="Email",
         description="User email.",
-#        pattern="[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
     )
     hyperfocuses: List[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
     )
-    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
+    def __eq__(self, other: User):
+        if self.user_id == other.user_id and self.email == other.email:
+            return True
+        return False
+
+
+class UserResponse(DefaultResponse):
+    message: UserPublic
+
+
+class UsersResponse(DefaultResponse):
+    message: List[UserPublic]

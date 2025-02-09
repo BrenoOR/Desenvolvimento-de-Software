@@ -12,8 +12,8 @@ from sqlalchemy.orm import Session
 
 from fastapi import FastAPI, Request, Depends
 
-from modules.router import router
-from modules import utils
+from app.modules.router import router
+from app.modules import utils
 
 env = os.environ["ENVIRONMENT"]
 
@@ -81,10 +81,10 @@ async def log_requests(request: Request, call_next):
         return response
 
 
-@app.get(f"/{env}", tags=["Hello World"], summary="Hello World endpoint.")
+@app.get(f"/{env}/v1", tags=["Hello World"], summary="Hello World endpoint.")
 def root():
     """Hello World endpoint."""
-    return {"Hello": "World"}
+    return {"message": "Hello World"}
 
 
 app.include_router(router, prefix=f"/{env}/v1")
