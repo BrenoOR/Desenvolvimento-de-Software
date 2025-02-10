@@ -60,6 +60,22 @@ class User(BaseModel):
                 setattr(self, field, data[field])
         self.updated_at = datetime.now()
 
+    def encode_password(self):
+        pass
+
+    def decode_password(self):
+        pass
+
+    def add_hyperfocus(self, hyperfocus_id: str):
+        if hyperfocus_id not in self.hyperfocuses:
+            self.hyperfocuses.append(hyperfocus_id)
+            self.updated_at = datetime.now()
+
+    def remove_hyperfocus(self, hyperfocus_id: str):
+        if hyperfocus_id in self.hyperfocuses:
+            self.hyperfocuses.remove(hyperfocus_id)
+            self.updated_at = datetime.now()
+
 
 class UserCreate(BaseModel):
     username: str = Field(
@@ -87,9 +103,7 @@ class UserCreate(BaseModel):
         super().__init__(*args, **kwargs)
 
     def __eq__(self, other: User):
-        if self.username == other.username and self.email == other.email:
-            return True
-        return False
+        return self.username == other.username and self.email == other.email
 
 
 class UserPublic(BaseModel):

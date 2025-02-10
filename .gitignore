@@ -5,3 +5,5 @@
 */proto/*.py*
 *.coverage
 *.test_report/*
+*database*
+*.db*

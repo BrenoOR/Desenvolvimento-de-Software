@@ -7,6 +7,7 @@ from http import HTTPStatus
 from loguru import logger
 from sqlalchemy.orm import Session
 
+from app.modules.user.db.db import get_session
 from app.modules.user.models.user import (
     User,
     UserCreate,
@@ -35,7 +36,9 @@ env = os.environ["ENVIRONMENT"]
     "",
     response_model=UsersResponse,
 )
-def list_users():
+def list_users(
+    session: Session = Depends(get_session),
+):
     try:
         users = UserService.list_users()
     except Exception as exception:

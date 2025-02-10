@@ -7,7 +7,7 @@ from uuid import uuid4
 from http import HTTPStatus as status
 from fastapi import HTTPException
 
-BaseDB = declarative_base()
+# BaseDB = declarative_base()
 
 
 def generate_id() -> str:
