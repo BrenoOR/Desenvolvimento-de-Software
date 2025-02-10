@@ -7,11 +7,9 @@ from http import HTTPStatus
 from loguru import logger
 from sqlalchemy.orm import Session
 
-from app.modules.user.db.db import get_session
+from app.modules.user.db.db import get_session as get_user_db
 from app.modules.user.models.user import (
-    User,
     UserCreate,
-    UserPublic,
     UserResponse,
     UsersResponse,
 )
@@ -37,10 +35,14 @@ env = os.environ["ENVIRONMENT"]
     response_model=UsersResponse,
 )
 def list_users(
-    session: Session = Depends(get_session),
+    max_results: int = Query(20, description="Max results to return"),
+    page_number: int = Query(1, description="Page number to return"),
+    user_db: Session = Depends(get_user_db),
 ):
     try:
-        users = UserService.list_users()
+        users = UserService.list_users(
+            max_results=max_results, page_number=page_number, db=user_db
+        )
     except Exception as exception:
         exception = format_error_response(exception)
         logger.error(f"Error: {exception}")
@@ -54,9 +56,9 @@ def list_users(
         HTTPStatus.CREATED: {"model": UserResponse},
     },
 )
-def create_user(user: UserCreate):
+def create_user(user: UserCreate, user_db: Session = Depends(get_user_db)):
     try:
-        user_response = UserService.create_user(user)
+        user_response = UserService.create_user(user=user, db=user_db)
     except Exception as exception:
         exception = format_error_response(exception)
         logger.error(f"Error: {exception}")
@@ -67,9 +69,9 @@ def create_user(user: UserCreate):
 @router.get(
     "/{user_id}",
 )
-def get_user(user_id: str):
+def get_user(user_id: str, user_db: Session = Depends(get_user_db)):
     try:
-        user_response = UserService.get_user(user_id)
+        user_response = UserService.get_user(user_id=user_id, db=user_db)
     except Exception as exception:
         exception = format_error_response(exception)
         logger.error(f"Error: {exception}")
@@ -80,9 +82,13 @@ def get_user(user_id: str):
 @router.put(
     "/{user_id}",
 )
-def update_user(user_id: str, user: UserCreate):
+def update_user(
+    user_id: str, user: UserCreate, user_db: Session = Depends(get_user_db)
+):
     try:
-        user_response = UserService.update_user(user_id, user)
+        user_response = UserService.update_user(
+            user_id=user_id, user_update=user, db=user_db
+        )
     except Exception as exception:
         exception = format_error_response(exception)
         logger.error(f"Error: {exception}")
@@ -93,9 +99,9 @@ def update_user(user_id: str, user: UserCreate):
 @router.delete(
     "/{user_id}",
 )
-def delete_user(user_id: str):
+def delete_user(user_id: str, user_db: Session = Depends(get_user_db)):
     try:
-        user_response = UserService.delete_user(user_id)
+        user_response = UserService.delete_user(user_id=user_id, db=user_db)
     except Exception as exception:
         exception = format_error_response(exception)
         logger.error(f"Error: {exception}")

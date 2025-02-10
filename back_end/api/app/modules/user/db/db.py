@@ -9,8 +9,14 @@ from sqlalchemy.orm import Session
 from sqlalchemy_utils import create_database, database_exists
 
 env = os.environ["ENVIRONMENT"]
+db_user = os.environ["POSTGRES_USER"]
+db_password = os.environ["POSTGRES_PASSWORD"]
+db_host = "db"
+db_port = os.environ["POSTGRES_PORT"]
+db_name = "local_db"
 
-LOCAL_DB_URL = "postgresql://postgres:postgres@localhost:5432/local_db"
+ALEMBIC_DB_URL = "postgresql://postgres:postgres@localhost:5432/local_db"
+LOCAL_DB_URL = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
 
 def get_db_url() -> str:

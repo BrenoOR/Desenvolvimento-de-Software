@@ -30,9 +30,6 @@ class User(BaseModel):
         description="User password.",
         min_length=8,
     )
-    hyperfocuses: List[str] = Field(
-        None, title="Hyperfocuses", description="User hyperfocuses IDs."
-    )
     is_active: bool = Field(None, title="Active", description="User is active.")
     is_superuser: bool = Field(
         None, title="Superuser", description="User is superuser."
@@ -56,7 +53,7 @@ class User(BaseModel):
 
     def update(self, data: Any):
         for field in data:
-            if hasattr(self, field) and data[field] is not None:
+            if hasattr(self, field) and data[field] is not None and field != "user_id":
                 setattr(self, field, data[field])
         self.updated_at = datetime.now()
 
@@ -92,7 +89,7 @@ class UserCreate(BaseModel):
         description="User password.",
         min_length=8,
     )
-    hyperfocuses: List[str] = Field(
+    hyperfocuses: list[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
     )
     is_superuser: bool = Field(
@@ -120,7 +117,7 @@ class UserPublic(BaseModel):
         title="Email",
         description="User email.",
     )
-    hyperfocuses: List[str] = Field(
+    hyperfocuses: list[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
     )
 

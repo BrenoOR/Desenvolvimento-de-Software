@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import ARRAY, ForeignKey, String
 from sqlalchemy.orm import (
     relationship,
     mapped_column,
@@ -13,14 +13,29 @@ table_registry = registry()
 
 
 @table_registry.mapped_as_dataclass
+class UserHyperfocus:
+    """Association table between User and Hyperfocus."""
+
+    __tablename__ = "UserHyperfocus"
+
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("User.user_id"), init=False, primary_key=True
+    )
+    hyperfocus_id: Mapped[str] = mapped_column(
+        ForeignKey("Hyperfocus.name"), init=False, primary_key=True
+    )
+
+    users = relationship("User", back_populates="hyperfocuses")
+    hyperfocuses = relationship("Hyperfocus", back_populates="users")
+
+
+@table_registry.mapped_as_dataclass
 class User:
     """User model."""
 
-    __tablename__ = "users"
+    __tablename__ = "User"
 
-    user_id: Mapped[str] = mapped_column(
-        init=False, primary_key=True, index=True, unique=True
-    )
+    user_id: Mapped[str] = mapped_column(primary_key=True, index=True, unique=True)
     username: Mapped[str] = mapped_column(index=True, unique=True)
     email: Mapped[str] = mapped_column(index=True, unique=True)
     password: Mapped[str]
@@ -29,42 +44,20 @@ class User:
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
 
-    hyperfocuses = relationship(
-        "user_hyperfocus", back_populates="user", cascade="all, delete"
-    )
+    hyperfocuses = relationship("UserHyperfocus", back_populates="users")
 
 
 @table_registry.mapped_as_dataclass
 class Hyperfocus:
     """Hyperfocus model."""
 
-    __tablename__ = "hyperfocuses"
+    __tablename__ = "Hyperfocus"
 
-    name: Mapped[str] = mapped_column(
-        init=False, primary_key=True, index=True, unique=True
-    )
+    name: Mapped[str] = mapped_column(primary_key=True, index=True, unique=True)
     description: Mapped[str]
     tags: Mapped[str]
+    related_hyperfocuses: Mapped[list[str]] = mapped_column(ARRAY(String))
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
 
-    users = relationship(
-        "UserHyperfocus", back_populates="hyperfocuses", cascade="all, delete"
-    )
-
-
-@table_registry.mapped_as_dataclass
-class UserHyperfocus:
-    """Association table between User and Hyperfocus."""
-
-    __tablename__ = "user_hyperfocus"
-
-    user_id: Mapped[str] = mapped_column(
-        ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True
-    )
-    hyperfocus_id: Mapped[str] = mapped_column(
-        ForeignKey("hyperfocuses.name", ondelete="CASCADE"), primary_key=True
-    )
-
-    users = relationship("users", back_populates="hyperfocuses")
-    hyperfocuses = relationship("hyperfocuses", back_populates="users")
+    users = relationship("UserHyperfocus", back_populates="hyperfocuses")
