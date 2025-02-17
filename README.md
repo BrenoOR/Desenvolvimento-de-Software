@@ -15,6 +15,38 @@ A proposta é criar um aplicativo inclusivo para conectar pessoas neurodiversas,
 - Criar uma rede de suporte social adaptada às necessidades de indivíduos neurodiversos, promovendo o sentimento de pertencimento.
 
 ---
+### Table of Contents
+
+|   |  |
+| ------------- | ------------- |
+| 1.  | [Pre-requisitos](#pre-requisitos)  |
+| 2.  | [Primeiros passos](#primeiros-passos) |
+| 2.1  | [Windows](#windows)  |
+| 3.  | [Configurando Cloud](#configurando-cloud) |
+| 4.  | [Configurando Protobufs](#configurando-protobufs)  |
+
+
+---
+
+### Technologies Used
+
+#### Back End
+- Python
+- FastAPI
+- SQL Alchemy
+- gRPC
+- gCLOUDSDK
+- Postgres
+
+#### Front End
+
+- Native wind
+
+
+
+
+
+
 
 ### Pre-requisitos
 
