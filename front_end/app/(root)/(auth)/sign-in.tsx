@@ -1,18 +1,55 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import icons from '@/constants/icons'
+import React, { useState } from 'react'
+
 import Link from 'expo-router/link'
 import FormField from '@/components/FormField.jsx'
+import CustomButton from '@/components/CustomButton.jsx'
 
+import icons from '@/constants/icons'
 
 const SignIn = () => {
   const [form, setForm] = useState({
-    name: '',
     email: '',
     password: ''
   })
+
+  const [error, setError] = useState('')
+
+  const handleSubmit = async () => {
+    setError('')
+  if (!form.email || !form.password) {
+    setError("Both fields are required!")
+    return
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(form.email)) {
+    setError("Email invalido.")
+    return;
+  }
+
+  try {
+    const response = await fetch('YOUR_BACKEND_URL/sign-in', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      console.log("Logged in successfully:", data)
+    } else {
+      const data = await response.json()
+      setError(data.error || "Algo deu errado.")
+    }
+  } catch (err) {
+    setError("Erro de conexão, por favor tente novamente.")
+  }
+  }
 
   return (
     <SafeAreaView className='h-full'>
@@ -44,13 +81,14 @@ const SignIn = () => {
 
                 />
             </View>
-            <TouchableOpacity className="w-64 bg-black rounded-full h-20 justify-center items-center">
-              <Link href={"/new-connection"}>
-                <Text className="text-2xl font-bold text-white">
-                  Entrar
-                </Text>
-              </Link>
-            </TouchableOpacity>
+            <Pressable className='w-64 h-20' onPress={handleSubmit}>
+              <CustomButton
+                text='Entrar'
+                linkTo={'/new-connection'}
+                color='bg-black'
+                textColor='text-white'
+              />
+            </Pressable>
             <Link href={"/sign-up"} className='text-xl m-3'>
               ou criar uma conta
             </Link>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import Link from 'expo-router/link'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,8 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from 'react-native';
 
 import icons from '@/constants/icons'
-import RNDateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
-import FormField from '@/components/FormField';
+import CustomButton from '@/components/CustomButton'
+import Logo from "@/components/Logo"
 
 const MAX_PRONOUNS = 1
 
@@ -25,19 +25,16 @@ const Pronouns = () => {
       : selectPronouns.length < MAX_PRONOUNS &&
         setSelectPronouns([...selectPronouns, pronoun])}
   
-  const [form, setForm] = useState(
-    {date: ''}
-  )
+  //Add lógica para salvar pronomes.
   return (
     <SafeAreaView className='flex-1'>
-      <ScrollView contentContainerClassName='flex-grow'>
         <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]}  locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
           <View className='h-full w-full justify-start items-center p-8'>
-             <Image source={icons.logo} className='h-8 w-40 mb-8'/>
+              <Logo/>
              <Text className='text-6xl font-bold mb-4 self-start'>Quais seus pronomes?</Text>
              <View className='h-24'>
-             <ScrollView horizontal={true} scrollEnabled={true}>
-                <View className='flex-row items-baseline w-screen'>
+             <ScrollView horizontal={true} scrollEnabled={true} contentContainerClassName='overflow-hidden'>
+                <View className='flex-row items-baseline'>
                   
                 {pronouns.map((myPronoun, index) => (
                   
@@ -55,26 +52,18 @@ const Pronouns = () => {
               </View>
               </ScrollView>
              </View>
-             <View className='w-screen mx-8 px-8 mb-32'>
-             <Text className='text-3xl font-bold mb-4 self-start'>Data de nascimento</Text>
-              <FormField
-              title={"DD/MM/YYYY"}
-              value={form.date}
-              handleChangeText={(e: any) => setForm({...form, date: e})}
-              keyboardType="date"
-              otherStyle="bg-gray200 opacity-[.75] rounded-2xl border border-gray-700 h-16 justify-center items-center"
-              />
-             </View>
-              <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center">
-                <Link href={"/new-connection"}>
-                  <Text className="text-3xl font-bold text-black">
-                    Concluir
-                  </Text>
-                </Link>
-              </TouchableOpacity>
+             <View className='h-1/2 justify-end items-center'>
+            <Pressable className='w-64 h-20' >
+                <CustomButton
+                  text='Próximo'
+                  linkTo={'/new-connection'}
+                  color='bg-primary'
+                  textColor='text-black'
+                />
+              </Pressable>
+          </View>
           </View>
         </LinearGradient>
-      </ScrollView>
     </SafeAreaView>
 )}
 
