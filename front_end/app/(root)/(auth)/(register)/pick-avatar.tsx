@@ -1,12 +1,10 @@
 import {View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import Link from "expo-router/link"
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { TouchableOpacity } from 'react-native';
 
-
-import icons from '@/constants/icons'
+import Logo from "@/components/Logo"
+import CustomButton from '@/components/CustomButton'
 
 const PickAvatar = () => {
   
@@ -26,30 +24,32 @@ const PickAvatar = () => {
   ];
   
   return (
-    <SafeAreaView className='h-full'>
-      <ScrollView contentContainerClassName='h-full'>
-        <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]} locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
+    <SafeAreaView className='flex-1'>
+        <LinearGradient 
+        colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]} 
+        locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
         <View className='h-full w-full justify-start items-center p-8'>
-          <Image source={icons.logo} className='h-8 w-40 mb-16'/>
+          <Logo/>
           <Text className='text-4xl font-bold mb-8'>Escolha seu avatar</Text>
-          <View className=" flex flex-row flex-wrap gap-2 justify-between mb-56">
+          <View className=" flex flex-row flex-wrap gap-2 justify-between mb-8">
             {avatars.map((item) => (
               <Pressable key={item.id} onPressIn={() => setAvatar({ userAvatar: item.id })}>
                 <Image source={item.source} className={`h-[90] w-[90] ${ avatar.userAvatar === item.id ? 'opacity-50' : 'opacity-100'}`} resizeMode="contain" />
               </Pressable>
             ))}
           </View>
-          <TouchableOpacity className="w-3/4 bg-primary rounded-full h-24 justify-center items-center">
-              <Link href={"/hiperfocus"}>
-                <Text className="text-3xl font-bold text-black">
-                  Continuar
-                </Text>
-              </Link>
-            </TouchableOpacity>
-            
+          <View className='h-40 justify-end items-center'>
+          <Pressable className='w-64 h-20' >
+              <CustomButton
+                text='Próximo'
+                linkTo={'/hiperfocus'}
+                color='bg-primary'
+                textColor='text-black'
+              />
+            </Pressable>
+          </View>
           </View>
         </LinearGradient>
-      </ScrollView>
     </SafeAreaView>
   )
 }

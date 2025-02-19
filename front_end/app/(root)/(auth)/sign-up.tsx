@@ -1,32 +1,72 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import icons from '@/constants/icons'
-import FormField from '@/components/FormField.jsx'
-import Link from "expo-router/link"
+import { UserProvider, useUser } from '@/components/UserContext'
+import React, { useState, createContext, useContext } from 'react'
 
+import FormField from '@/components/FormField'
+import CustomButton from '@/components/CustomButton'
+import Link from "expo-router/link"
+import Logo from "@/components/Logo"
 
 
 const SignUp = () => {
+  const { setUserId } = useUser()
   const [form, setForm] = useState({
-    name: '',
+    user_id: '',
     email: '',
-    password: ''
+    password: '',
+    hiperfocus: ''
   })
 
+  const [error, setError] = useState('')
+
+  const handleSubmit = async () => {
+    setError('')
+
+    if (!form.user_id || !form.email || !form.password) {
+      setError('Preencha todos os campos.')
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(form.email)) {
+      setError('Email invalido.')
+      return
+    }
+    try {
+      const response = await fetch('localhost:8000/local/v1/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log('Credenciais:', data)
+        setUserId(form.user_id)
+      } else {
+        const data = await response.json()
+        setError(data.error || 'Algo deu errado.')
+      }
+    } catch (err) {
+      setError('Erro de conexão, por favor tente novamente.')
+    }
+
+  }
   return (
-    <SafeAreaView className='h-full'>
-      <ScrollView contentContainerClassName='flex-grow'>
+    <SafeAreaView className='flex-1'>
         <LinearGradient 
         colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb"]} 
         start={[0, 0]} 
         end={[1, 1]}
         className="flex-1"
         >
-          <View className='flex-1 w-full justify-start items-center p-8'>
-            <Image source={icons.logo} className='h-8 w-40 mb-8'/>
-            <Text className='font-bold text-3xl mb-8'>
+          <View className='flex-1 w-full justify-start items-center p-8 gap-4'>
+            <Logo/>
+            <Text className='font-bold text-3xl'>
               Crie sua conta {''}
               <Text className='font-normal'>
                  e explore novas conexões!
@@ -35,8 +75,8 @@ const SignUp = () => {
             <View className='w-full gap-4'>
               <FormField
                 title="Nome"
-                value={form.name}
-                handleChangeText={(e: any) => setForm({...form, name: e})}
+                value={form.user_id}
+                handleChangeText={(e: any) => setForm({...form, user_id: e})}
                 keyboardType="name"
                 otherStyle="bg-gray200 opacity-[.40] rounded-xl border border-gray-700 p-2"
               />
@@ -57,14 +97,15 @@ const SignUp = () => {
 
                 />
             </View>
-            <TouchableOpacity className="w-64 h-20 bg-black rounded-full justify-center items-center mt-4">
-              <Link href={"/exhibited-name"}>
-                <Text className="text-2xl font-bold text-white">
-                  Continuar
-                </Text>
-              </Link>
-            </TouchableOpacity>
-            <Link href={"/sign-in"} className='text-xl m-3'>
+            <Pressable className='w-64 h-20' onPress={handleSubmit}>
+              <CustomButton
+                text='Começar'
+                linkTo={'/exhibited-name'}
+                color='bg-black'
+                textColor='text-white'
+              />
+            </Pressable>
+            <Link href={"/sign-in"} className='text-xl'>
               Já tenho uma conta
             </Link>
             <Text>
@@ -72,7 +113,6 @@ const SignUp = () => {
             </Text>
           </View>
         </LinearGradient>
-      </ScrollView>
     </SafeAreaView>
   )
 }
