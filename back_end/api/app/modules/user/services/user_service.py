@@ -7,9 +7,6 @@ from app.modules.user.db.hyperfocus_db import HyperFocusDB
 from app.modules.user.models.user import (
     User,
     UserCreate,
-    UserPublic,
-    UserResponse,
-    UsersResponse,
 )
 from app.modules.user.models.hyperfocus import HyperFocus
 

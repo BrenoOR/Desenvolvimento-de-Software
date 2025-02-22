@@ -22,7 +22,6 @@ class UserDB:
                     UserSchema.username,
                     UserSchema.email,
                     UserSchema.is_active,
-                    UserSchema.is_superuser,
                     UserSchema.created_at,
                     UserSchema.updated_at,
                     func.array_agg(UserHyperfocusSchema.hyperfocus_id).label(
@@ -39,7 +38,6 @@ class UserDB:
                     UserSchema.username,
                     UserSchema.email,
                     UserSchema.is_active,
-                    UserSchema.is_superuser,
                     UserSchema.created_at,
                     UserSchema.updated_at,
                 )
@@ -90,17 +88,26 @@ class UserDB:
         return user
 
     @staticmethod
-    def update_user(user_id: str, user_update: UserCreate, db: Session) -> UserPublic:
+    def update_user(user_id: str, user_create: UserCreate, db: Session) -> UserPublic:
         try:
             user_db = db.query(UserSchema).filter(UserSchema.user_id == user_id).first()
-            if user_db is None:
-                raise HTTPException(status_code=404, detail="User not found")
 
-            user_db.update(user_update.to_dict())
-            db.query(UserSchema).filter(UserSchema.user_id == user_db.user_id).update(
-                user_db.to_dict()
+            user_update = User(**user_db.__dict__)
+            user_update.update(user_create.to_dict())
+            user_dict = user_update.to_dict()
+
+            db.query(UserSchema).filter(UserSchema.user_id == user_id).update(
+                {
+                    key: getattr(user_update, key)
+                    for key in user_dict.keys()
+                    if getattr(user_update, key) is not None
+                }
             )
             db.commit()
+            db.refresh(user_db)
+
+            user_db = UserDB.get_user(user_id, db)
+
         except Exception as exception:
             logger.error(f"Error: {exception}")
             db.rollback()

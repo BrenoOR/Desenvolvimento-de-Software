@@ -24,16 +24,22 @@ class User(BaseModel):
         title="Email",
         description="User email.",
     )
-    password: str = Field(
+    pronoums: str = Field(
         None,
-        title="Password",
-        description="User password.",
-        min_length=8,
+        title="Pronoums",
+        description="User pronoums.",
+    )
+    profile_picture: str = Field(
+        None,
+        title="Profile picture",
+        description="User profile picture.",
+    )
+    avatar_picture: str = Field(
+        None,
+        title="Avatar picture",
+        description="User avatar picture.",
     )
     is_active: bool = Field(None, title="Active", description="User is active.")
-    is_superuser: bool = Field(
-        None, title="Superuser", description="User is superuser."
-    )
     created_at: datetime = Field(
         None, title="Created at", description="User creation date."
     )
@@ -45,9 +51,6 @@ class User(BaseModel):
         super().__init__(*args, **kwargs)
         self.user_id = generate_id()
         self.is_active = self.is_active if self.is_active is not None else True
-        self.is_superuser = (
-            self.is_superuser if self.is_superuser is not None else False
-        )
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
@@ -62,16 +65,6 @@ class User(BaseModel):
 
     def decode_password(self):
         pass
-
-    def add_hyperfocus(self, hyperfocus_id: str):
-        if hyperfocus_id not in self.hyperfocuses:
-            self.hyperfocuses.append(hyperfocus_id)
-            self.updated_at = datetime.now()
-
-    def remove_hyperfocus(self, hyperfocus_id: str):
-        if hyperfocus_id in self.hyperfocuses:
-            self.hyperfocuses.remove(hyperfocus_id)
-            self.updated_at = datetime.now()
 
 
 class UserCreate(BaseModel):
@@ -91,9 +84,6 @@ class UserCreate(BaseModel):
     )
     hyperfocuses: list[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
-    )
-    is_superuser: bool = Field(
-        None, title="Superuser", description="User is superuser."
     )
 
     def __init__(self, *args, **kwargs):

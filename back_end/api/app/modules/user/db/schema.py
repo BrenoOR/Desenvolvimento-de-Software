@@ -38,9 +38,10 @@ class User:
     user_id: Mapped[str] = mapped_column(primary_key=True, index=True, unique=True)
     username: Mapped[str] = mapped_column(index=True, unique=True)
     email: Mapped[str] = mapped_column(index=True, unique=True)
-    password: Mapped[str]
+    pronoums: Mapped[str]
+    profile_picture: Mapped[str]
+    avatar_picture: Mapped[str]
     is_active: Mapped[bool]
-    is_superuser: Mapped[bool]
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
 

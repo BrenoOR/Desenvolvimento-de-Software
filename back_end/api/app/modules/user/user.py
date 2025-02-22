@@ -67,9 +67,12 @@ def create_user(user: UserCreate, user_db: Session = Depends(get_user_db)):
 
 
 @router.get(
-    "/{user_id}",
+    "",
 )
-def get_user(user_id: str, user_db: Session = Depends(get_user_db)):
+def get_user(
+    user_id: str = Query(..., description="User ID."),
+    user_db: Session = Depends(get_user_db),
+):
     try:
         user_response = UserService.get_user(user_id=user_id, db=user_db)
     except Exception as exception:
@@ -80,10 +83,12 @@ def get_user(user_id: str, user_db: Session = Depends(get_user_db)):
 
 
 @router.put(
-    "/{user_id}",
+    "",
 )
 def update_user(
-    user_id: str, user: UserCreate, user_db: Session = Depends(get_user_db)
+    user: UserCreate,
+    user_id: str = Query(..., description="User ID."),
+    user_db: Session = Depends(get_user_db),
 ):
     try:
         user_response = UserService.update_user(
@@ -97,9 +102,12 @@ def update_user(
 
 
 @router.delete(
-    "/{user_id}",
+    "",
 )
-def delete_user(user_id: str, user_db: Session = Depends(get_user_db)):
+def delete_user(
+    user_id: str = Query(..., description="User ID."),
+    user_db: Session = Depends(get_user_db),
+):
     try:
         user_response = UserService.delete_user(user_id=user_id, db=user_db)
     except Exception as exception:
