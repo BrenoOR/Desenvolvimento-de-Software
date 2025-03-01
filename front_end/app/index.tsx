@@ -1,8 +1,9 @@
-import Link from "expo-router/link"
-import { View } from "react-native"
+import Link from "expo-router/link";
+import { View } from "react-native";
 
 
 export default function Index() {
+  
   return (
     <View
       style={{

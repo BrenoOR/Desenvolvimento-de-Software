@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/android-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.prisma"
     },
     "web": {
       "bundler": "metro",
@@ -31,8 +32,6 @@
           "resizeMode": "cover",
           "backgroundColor": "#ffffff",
           "enableFullScreenImage_Legacy": true
-
-
         }
       ],
       [
@@ -48,10 +47,9 @@
           }
         }
       ]
-      
     ],
-      "experiments": {
-        "typedRoutes": true
-      }
+    "experiments": {
+      "typedRoutes": true
     }
+  }
 }

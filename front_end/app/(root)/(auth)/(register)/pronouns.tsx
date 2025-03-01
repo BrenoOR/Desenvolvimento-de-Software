@@ -1,19 +1,26 @@
 import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
-import Link from 'expo-router/link'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from 'react-native';
+import { useSignupStore } from "@/stores/signupStore";
+import { useRouter } from "expo-router";
 
 import icons from '@/constants/icons'
 import CustomButton from '@/components/CustomButton'
 import Logo from "@/components/Logo"
 
+import Toast from "react-native-toast-message";
+
+
 const MAX_PRONOUNS = 1
 
 const Pronouns = () => {
+  const router = useRouter();
+  const { pronouns, setForm, nextStep, submitForm } = useSignupStore();
+
   const [selectPronouns, setSelectPronouns] = useState<string[]>([])
-  const pronouns = [
+  const userPronouns = [
     "Ela/dela",
     "Ele/dele",
     "Não-binário"
@@ -25,7 +32,16 @@ const Pronouns = () => {
       : selectPronouns.length < MAX_PRONOUNS &&
         setSelectPronouns([...selectPronouns, pronoun])}
   
-  //Add lógica para salvar pronomes.
+  const handleSubmit = async () => {
+    if (selectPronouns.length > 0) {
+      setForm("pronouns", selectPronouns[0]); 
+      const success = await submitForm(); 
+      if (success) {
+        nextStep();
+        router.push('/new-connection');
+      }
+    }}
+  
   return (
     <SafeAreaView className='flex-1'>
         <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb", "#201c1b"]}  locations={[0.65, 0.68, 0.71, 0.74, 0.77, 0.80]}>
@@ -36,9 +52,9 @@ const Pronouns = () => {
              <ScrollView horizontal={true} scrollEnabled={true} contentContainerClassName='overflow-hidden'>
                 <View className='flex-row items-baseline'>
                   
-                {pronouns.map((myPronoun, index) => (
+                {userPronouns.map((myPronoun, index) => (
                   
-                  <TouchableOpacity className='m-2 border border-gray-300 rounded-3xl p-2'
+                  <TouchableOpacity className='m-2 border border-gray-300 rounded-3xl p-2' 
                     key={index}
                     onPress={() => togglepronoun(myPronoun)}
                     style={{
@@ -53,12 +69,12 @@ const Pronouns = () => {
               </ScrollView>
              </View>
              <View className='h-1/2 justify-end items-center'>
-            <Pressable className='w-64 h-20' >
+            <Pressable className='w-64 h-20'>
                 <CustomButton
                   text='Próximo'
-                  linkTo={'/new-connection'}
                   color='bg-primary'
                   textColor='text-black'
+                  onPress={handleSubmit}
                 />
               </Pressable>
           </View>

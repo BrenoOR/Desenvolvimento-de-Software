@@ -1,8 +1,9 @@
-import { SplashScreen, Stack } from "expo-router";
-import React, { useEffect } from "react";
+import { SplashScreen, Stack } from "expo-router"
+import React, { useEffect } from "react"
 import "./global.css";
 import { useFonts } from "expo-font";
 import { UserProvider } from "@/components/UserContext"
+import Toast from 'react-native-toast-message'
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -26,6 +27,7 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <Stack screenOptions={{ headerShown: false }} />
+      <Toast />
     </UserProvider>
   )
 }

@@ -1,7 +1,8 @@
-import { View, Text, ScrollView, Image, Pressable } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useUser } from '@/components/UserContext'
+import { useRouter } from "expo-router";
+import { useSignupStore } from "@/stores/signupStore";
 
 import React, { useState } from 'react'
 import CustomButton from '@/components/CustomButton.jsx'
@@ -10,46 +11,19 @@ import Logo from '@/components/Logo'
 import FormField from '@/components/FormField'
 import Checkbox from 'expo-checkbox'
 
+import Toast from "react-native-toast-message"
 
 const ExhibitedName = () => {
-  const [form, setForm] = useState({
-      username: ''
-    })
-  
-  
-  const { userId } = useUser()
-
-  const [isChecked, setIsChecked] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const [isChecked, setIsChecked] = useState(false);
+  const { username, setForm, nextStep, submitForm } = useSignupStore();
 
   const handleSubmit = async () => {
-    setError('')
-  if (!form.username) {
-    setError("Insira um nome de usuário.")
-    return
-  }
-
-  try {
-    const response = await fetch(`localhost:8081/local/v1/users/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(form)
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      console.log("Logged in successfully:", data)
-    } else {
-      const data = await response.json()
-      setError(data.error || "Algo deu errado.")
+    const success = await submitForm(); 
+      if (success){
+      nextStep();
+      router.push('/add-picture') }
     }
-  } catch (err) {
-    setError("Erro de conexão, por favor tente novamente.")
-  }
-  }
-
   return (
   <SafeAreaView className='flex-1'>
       <LinearGradient 
@@ -71,8 +45,8 @@ const ExhibitedName = () => {
             </Text>
             <FormField
               title="Escolha algo legal"
-              value={form.username}
-              handleChangeText={(e: any) => setForm({...form, username: e})}
+              value={username}
+              handleChangeText={(e: string) => setForm("username", e)}
               keyboardType="default"
               otherStyle="bg-gray200 opacity-[.75] rounded-2xl border border-gray-700 p-2"
             />
@@ -90,12 +64,12 @@ const ExhibitedName = () => {
           <Pressable className='w-64 h-20' onPress={handleSubmit}>
               <CustomButton
                 text='Próximo'
-                linkTo={'/add-picture'}
                 color='bg-primary'
                 textColor='text-black'
               />
             </Pressable>
           </View>
+          <Toast/>
         </View>
       </LinearGradient>
   </SafeAreaView>

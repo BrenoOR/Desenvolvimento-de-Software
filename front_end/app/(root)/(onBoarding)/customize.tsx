@@ -2,12 +2,14 @@ import { View, Text, Pressable} from 'react-native'
 import { Link } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useRouter } from "expo-router"
 
 import React from 'react'
 import MaskedView from '@react-native-masked-view/masked-view'
 import CustomButton from '@/components/CustomButton.jsx'
 
 const Customize = () => {
+  const router = useRouter()
   return (
     <SafeAreaView className='flex-1'>
         <LinearGradient 
@@ -44,12 +46,12 @@ const Customize = () => {
                 </View>
             <View className='h-64 justify-end items-center'>
               <Pressable className='w-64 h-20'>
-                <CustomButton
-                  text='Começar'
-                  linkTo={'/sign-up'}
-                  color='bg-black'
-                  textColor='text-white'
-                />
+              <CustomButton
+                text='Começar'
+                color='bg-black'
+                textColor='text-white'
+                onPress= {() => router.push('/sign-up')}
+              />
               </Pressable>
               <Link href={"/sign-in"} className='text-xl mt-2'>Ou fazer login</Link>
             </View>

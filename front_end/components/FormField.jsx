@@ -14,7 +14,7 @@ const FormField = ({title, value, handleChangeText, keyboardType, otherStyle, ..
                 placeholder={title} 
                 placeholderTextColor="gray" 
                 onChangeText={handleChangeText}
-                secureTextEntry={keyboardType === 'password' && !showPassword}
+                secureTextEntry={keyboardType === 'number' && !showPassword}
             />
         </View>
     )

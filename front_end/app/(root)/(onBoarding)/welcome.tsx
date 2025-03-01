@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { TouchableOpacity } from 'react-native'
+import { useRouter } from "expo-router"
 
 import React from 'react'
 
@@ -10,6 +10,7 @@ import CustomButton from '@/components/CustomButton.jsx'
 
 
 const Welcome = () => {
+  const router = useRouter()
   return (
     <SafeAreaView className='flex-1'>
         <LinearGradient 
@@ -38,10 +39,10 @@ const Welcome = () => {
             </Text>
             <Pressable className='w-64 h-20'>
               <CustomButton
-                text='Entrar'
-                linkTo={'/benefits'}
+                text='Próximo'
                 color='bg-black'
                 textColor='text-white'
+                onPress= {() => router.push('/benefits')}
               />
             </Pressable>
           </View>

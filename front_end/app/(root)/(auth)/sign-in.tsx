@@ -2,55 +2,25 @@ import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useState } from 'react'
+import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "expo-router";
 
 import Link from 'expo-router/link'
 import FormField from '@/components/FormField.jsx'
 import CustomButton from '@/components/CustomButton.jsx'
 
 import icons from '@/constants/icons'
+import Toast from "react-native-toast-message";
+
 
 const SignIn = () => {
-  const [form, setForm] = useState({
-    email: '',
-    password: ''
-  })
-
-  const [error, setError] = useState('')
-
+  const router = useRouter();
+  const { email, password, setForm, login } = useAuthStore()
   const handleSubmit = async () => {
-    setError('')
-  if (!form.email || !form.password) {
-    setError("Both fields are required!")
-    return
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(form.email)) {
-    setError("Email invalido.")
-    return;
-  }
-
-  try {
-    const response = await fetch('YOUR_BACKEND_URL/sign-in', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(form)
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      console.log("Logged in successfully:", data)
-    } else {
-      const data = await response.json()
-      setError(data.error || "Algo deu errado.")
-    }
-  } catch (err) {
-    setError("Erro de conexão, por favor tente novamente.")
-  }
-  }
-
+    const success = await login(); 
+    if (success) {
+      router.push('/new-connection'); 
+    }}
   return (
     <SafeAreaView className='h-full'>
       <ScrollView contentContainerClassName='h-full'>
@@ -66,17 +36,17 @@ const SignIn = () => {
             <View className='w-full gap-4 mb-8'>
               <FormField
                   title="Email"
-                  value={form.email}
-                  handleChangeText={(e: any) => setForm({...form, email: e})}
+                  value={email}
+                  handleChangeText={(e: string) => setForm("email", e)}
                   keyboardType="email-address"
                   otherStyle="bg-gray200 opacity-[.40] rounded-2xl border border-gray-700 p-2"
 
                 />
               <FormField
                   title="Senha"
-                  value={form.password}
-                  handleChangeText={(e: any) => setForm({...form, password: e})}
-                  keyboardType="password"
+                  value={password}
+                  handleChangeText={(e: string) => setForm("password", e)}
+                  keyboardType="number"
                   otherStyle="bg-gray200 opacity-[.40] rounded-2xl border border-gray-700 p-2"
 
                 />
@@ -84,14 +54,15 @@ const SignIn = () => {
             <Pressable className='w-64 h-20' onPress={handleSubmit}>
               <CustomButton
                 text='Entrar'
-                linkTo={'/new-connection'}
                 color='bg-black'
                 textColor='text-white'
+
               />
             </Pressable>
             <Link href={"/sign-up"} className='text-xl m-3'>
               ou criar uma conta
             </Link>
+            <Toast/>
           </View>
         </LinearGradient>
       </ScrollView>
