@@ -4,11 +4,14 @@ import Link from "expo-router/link"
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import { TouchableOpacity } from 'react-native'
+
 import icons from '@/constants/icons'
 import Chats from '@/components/Chats'
-
+import ConnectionButton from '@/components/ConnectionButton'
+import Logo from '@/components/Logo'
 
 const NewConnection = () => {
+  //Lembrar de tirar os mocks quando tiver a API
   const progress = [
     {title: 'Em progresso', id: 1, messages: []},
     {title: 'Finalizadas', id: 2, messages: []}
@@ -33,29 +36,26 @@ const NewConnection = () => {
   
 
   return (
-    <SafeAreaView className='flex-1'>
+    //Falta editar a tela pra ficar no mesmo padrão das outras
+    <SafeAreaView className='flex-1 bg-primary'>
       <ScrollView contentContainerClassName='flex-grow' scrollEnabled={true}>
-        <View className='flex-1 w-full justify-start items-center px-8 gap-4'>
-          <View className='justify-center items-center w-full h-16'>
-            <Image source={icons.logo} className='h-8 w-40'/>
-          </View>
-            <View className='h-24 w-5/66 rounded-2xl border border-gray-400 overflow-hidden items-left mt-4'>
-              <LinearGradient colors={["#ffffff", "#fbc7a0", "#fda0ec", "#a36ce6", "#39c0fb"]} start={[1,1]} end={[0,0]} className='flex-1'>
-                  <TouchableOpacity className='justify-center items-left'>
-                    <Link href='/chat/prepare-connection'>
-                    <View className='flex-row p-4 gap-16'>
-                        <Text className='text-2xl font-bold'>
-                          Nova conexão
-                          {'\n'}
-                        <Text className='text-xl font-normal'>
-                          Converse com uma IA
-                        </Text>
-                        </Text>
-                        <Image source={icons.share} className='h-14 w-14 self-right'/>
-                      </View>
-                    </Link>
-                  </TouchableOpacity> 
-              </LinearGradient>
+        <View className='h-full w-full justify-start items-center px-8 gap-4'>
+          <Logo/>
+            <View className='justify-center items-center'>
+              <ConnectionButton
+              textH1='Nova Conexão'
+              textH3='Encontre novas pessoas'
+              icon={icons.share}
+              linkTo={'/prepare-connection'}
+              type='people'
+              />
+              <ConnectionButton
+              textH1='Pratique conversação'
+              textH3='Converse com uma IA'
+              icon={icons.starPopup}
+              linkTo={'/prepare-connection'}
+              type='ai'
+              />
             </View>
             <Text className='text-2xl self-start font-bold'>Seu histórico</Text>
           <View className='flex-row gap-1 w-5/6 justify-center mx-4'>
@@ -77,14 +77,13 @@ const NewConnection = () => {
                {selectedChats.length > 0 ? (
                  selectedChats.map((item) => (
                    <View key={item.id}>
-                    <Link href='/'>
                       <Chats 
                       picture={item.profilePic} 
                       lastMessage={item.text} 
                       chatName={item.chatName} 
                       time={item.time} 
+                      linkTo={''}
                     />
-                   </Link>
                    <View className='h-[1px] w-full bg-gray-300 m-2'/>
                    </View>
                  ))

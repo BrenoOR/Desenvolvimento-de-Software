@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import MaskedView from '@react-native-masked-view/masked-view'
+import { useRouter } from "expo-router"
 
+import MaskedView from '@react-native-masked-view/masked-view'
 import React from 'react'
 
 import icons from '@/constants/icons'
@@ -12,6 +13,7 @@ import CustomButton from '@/components/CustomButton.jsx'
 
 
 const Benefits = () => {
+  const router = useRouter()
   return (
     <SafeAreaView className="bg-black flex-1">
         <View className="flex-1 w-full justify-center items-center p-4">
@@ -67,16 +69,15 @@ const Benefits = () => {
                         <Image source={icons.trust}/>
                         <Text className='text-xl font-semibold'>Interagir com segurança e privacidade.</Text>
                     </View>
-                    <Pressable className='w-64 h-20'>
+                    <Pressable className='w-64 h-20' >
                       <CustomButton
                         text='Próximo'
-                        linkTo={'/privacy'}
                         color='bg-black'
                         textColor='text-white'
+                        onPress= {() => router.push('/privacy')}
                       />
                     </Pressable>
-                    <Link 
-                    href={"/sign-up"} className='text-xl'>Pular</Link>
+                    <Link href={"/sign-up"} className='text-xl'>Pular</Link>
                     
                   </View>
               </LinearGradient>

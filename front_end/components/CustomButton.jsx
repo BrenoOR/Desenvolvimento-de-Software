@@ -4,14 +4,12 @@ import Link from 'expo-router/link'
 
 
 
-const CustomButton = ({text, linkTo, color, textColor}) => {
+const CustomButton = ({text, color, textColor, onPress}) => {
   return (
-    <TouchableOpacity className={`${color} w-full h-full justify-center items-center rounded-full`}>
-      <Link href={linkTo}>
+    <TouchableOpacity className={`${color} w-full h-full justify-center items-center rounded-full`} onPress={onPress}>
         <Text className={`${textColor} text-2xl font-bold`}>
         {text}
         </Text>
-      </Link>
     </TouchableOpacity>
   )
 }

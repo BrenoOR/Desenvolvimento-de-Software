@@ -2,45 +2,24 @@ import { View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useUser } from '@/components/UserContext'
+import { useSignupStore } from "@/stores/signupStore";
+import { useRouter } from "expo-router";
 
 import CustomButton from '@/components/CustomButton'
 import Logo from "@/components/Logo"
 import FormField from '@/components/FormField.jsx'
 
-const Hiperfocus = () => {
-  const [form, setForm] = useState({
-      hiperfocus: ''
-    })
-  const [error, setError] = useState('')
-  const { userId } = useUser()
-  const handleSubmit = async () => {
-    setError('')
-    if (!form.hiperfocus) {
-      setError("Insira seu hiperfoco")
-      return
-    }
-    try {
-      const response = await fetch(`localhost:8081/local/v1/users/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form)
-      })
-  
-      if (response.ok) {
-        const data = await response.json()
-        console.log("Logged in successfully:", data)
-      } else {
-        const data = await response.json()
-        setError(data.error || "Algo deu errado.")
-      }
-    } catch (err) {
-      setError("Erro de conexão, por favor tente novamente.")
-    }
+import Toast from "react-native-toast-message";
 
-  }
+const Hiperfocus = () => {
+  const router = useRouter();
+  const { hiperfocus, setForm, nextStep, submitForm } = useSignupStore();
+
+  const handleSubmit = async () => {
+    const success = await submitForm(); 
+      if (success){
+      nextStep();
+      router.push('/pronouns') }}
   return (
     <SafeAreaView className='flex-1'>
         <LinearGradient 
@@ -53,8 +32,20 @@ const Hiperfocus = () => {
             <View className='h-60'>
             <FormField
               title="Descreva em até 5 palavras"
-              value={form.hiperfocus}
-              handleChangeText={(e: any) => setForm({...form, hiperfocus: e})}
+              value={hiperfocus}
+              handleChangeText={
+                (e: string) => {
+                  const words = e.trim().split(/\s+/);  
+                  if (words.length <= 5) {
+                    setForm("hiperfocus", e);  
+                  } else {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Máximo de 5 palavras',
+                      text2: 'Por favor, descreva seu hiperfoco com no máximo 5 palavras.',
+                    });
+                  }
+              }}
               keyboardType="text"
               otherStyle="border-b-2 border-black items-center"
             />
@@ -64,12 +55,12 @@ const Hiperfocus = () => {
           <Pressable className='w-64 h-20' onPress={handleSubmit}>
               <CustomButton
                 text='Próximo'
-                linkTo={'/pronouns'}
                 color='bg-primary'
                 textColor='text-black'
               />
             </Pressable>
           </View>
+          <Toast/>
           </View>
         </LinearGradient>
     </SafeAreaView>

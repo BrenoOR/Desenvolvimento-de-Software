@@ -2,13 +2,19 @@ import {View, Text, ScrollView, Image, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useRouter } from "expo-router";
+import { useSignupStore } from "@/stores/signupStore";
 
 import Logo from "@/components/Logo"
 import CustomButton from '@/components/CustomButton'
 
+import Toast from "react-native-toast-message"
+
 const PickAvatar = () => {
-  
-  const [avatar, setAvatar] = useState({userAvatar:''})
+  const router = useRouter();
+  const { avatar_picture, setForm, nextStep, submitForm } = useSignupStore();
+    
+  const [avatar, setAvatar] = useState({userAvatar:'', picked: false})
   const avatars = [
 
     { id: 'avatar1', source: require('@/assets/icons/avatar1.png') },
@@ -22,6 +28,16 @@ const PickAvatar = () => {
     { id: 'avatar9', source: require('@/assets/icons/avatar9.png') }
 
   ];
+
+  const handleSubmit = async () => {
+    if (avatar.picked) {
+      setForm("avatar_picture", avatar.userAvatar); 
+      const success = await submitForm(); 
+      if (success) {
+        nextStep();
+        router.push('/hiperfocus');
+      }
+    }}
   
   return (
     <SafeAreaView className='flex-1'>
@@ -33,18 +49,18 @@ const PickAvatar = () => {
           <Text className='text-4xl font-bold mb-8'>Escolha seu avatar</Text>
           <View className=" flex flex-row flex-wrap gap-2 justify-between mb-8">
             {avatars.map((item) => (
-              <Pressable key={item.id} onPressIn={() => setAvatar({ userAvatar: item.id })}>
+              <Pressable key={item.id} onPressIn={() => setAvatar({ userAvatar: item.id, picked: true})}>
                 <Image source={item.source} className={`h-[90] w-[90] ${ avatar.userAvatar === item.id ? 'opacity-50' : 'opacity-100'}`} resizeMode="contain" />
               </Pressable>
             ))}
           </View>
           <View className='h-40 justify-end items-center'>
-          <Pressable className='w-64 h-20' >
+          <Pressable className='w-64 h-20'>
               <CustomButton
                 text='Próximo'
-                linkTo={'/hiperfocus'}
                 color='bg-primary'
                 textColor='text-black'
+                onPress={handleSubmit}
               />
             </Pressable>
           </View>
