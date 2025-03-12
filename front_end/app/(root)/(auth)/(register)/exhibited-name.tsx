@@ -16,7 +16,7 @@ import Toast from "react-native-toast-message"
 const ExhibitedName = () => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
-  const { username, setForm, nextStep, submitForm } = useSignupStore();
+  const { nickname, setForm, nextStep, submitForm } = useSignupStore();
 
   const handleSubmit = async () => {
     const success = await submitForm(); 
@@ -45,8 +45,8 @@ const ExhibitedName = () => {
             </Text>
             <FormField
               title="Escolha algo legal"
-              value={username}
-              handleChangeText={(e: string) => setForm("username", e)}
+              value={nickname}
+              handleChangeText={(e: string) => setForm("nickname", e)}
               keyboardType="default"
               otherStyle="bg-gray200 opacity-[.75] rounded-2xl border border-gray-700 p-2"
             />
@@ -61,11 +61,12 @@ const ExhibitedName = () => {
             *Seu nome e foto não serão visíveis para outros usuários no modo anônimo.
           </Text>
           <View className='h-40 justify-end items-center'>
-          <Pressable className='w-64 h-20' onPress={handleSubmit}>
+          <Pressable className='w-64 h-20'>
               <CustomButton
                 text='Próximo'
                 color='bg-primary'
                 textColor='text-black'
+                onPress={handleSubmit}
               />
             </Pressable>
           </View>
@@ -74,6 +75,6 @@ const ExhibitedName = () => {
       </LinearGradient>
   </SafeAreaView>
   )
-}
+};
 
 export default ExhibitedName

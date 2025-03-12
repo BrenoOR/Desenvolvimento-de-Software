@@ -51,12 +51,12 @@ const SignIn = () => {
 
                 />
             </View>
-            <Pressable className='w-64 h-20' onPress={handleSubmit}>
+            <Pressable className='w-64 h-20'>
               <CustomButton
                 text='Entrar'
                 color='bg-black'
                 textColor='text-white'
-
+                onPress={handleSubmit}
               />
             </Pressable>
             <Link href={"/sign-up"} className='text-xl m-3'>

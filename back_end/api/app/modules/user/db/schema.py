@@ -25,8 +25,8 @@ class UserHyperfocus:
         ForeignKey("Hyperfocus.name"), init=False, primary_key=True
     )
 
-    users = relationship("User", back_populates="hyperfocuses")
-    hyperfocuses = relationship("Hyperfocus", back_populates="users")
+    user = relationship("User", back_populates="hyperfocus")
+    hyperfocus = relationship("Hyperfocus", back_populates="user")
 
 
 @table_registry.mapped_as_dataclass
@@ -38,6 +38,8 @@ class User:
     user_id: Mapped[str] = mapped_column(primary_key=True, index=True, unique=True)
     username: Mapped[str] = mapped_column(index=True, unique=True)
     email: Mapped[str] = mapped_column(index=True, unique=True)
+    password: Mapped[str]
+    nickname: Mapped[str]
     pronoums: Mapped[str]
     profile_picture: Mapped[str]
     avatar_picture: Mapped[str]
@@ -45,7 +47,7 @@ class User:
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
 
-    hyperfocuses = relationship("UserHyperfocus", back_populates="users")
+    hyperfocus = relationship("UserHyperfocus", back_populates="user")
 
 
 @table_registry.mapped_as_dataclass
@@ -61,4 +63,4 @@ class Hyperfocus:
     created_at: Mapped[datetime]
     updated_at: Mapped[datetime]
 
-    users = relationship("UserHyperfocus", back_populates="hyperfocuses")
+    user = relationship("UserHyperfocus", back_populates="hyperfocus")

@@ -24,6 +24,17 @@ class User(BaseModel):
         title="Email",
         description="User email.",
     )
+    password: str = Field(
+        None,
+        title="Password",
+        description="User password.",
+        min_length=8,
+    )
+    nickname: str = Field(
+        None,
+        title="Nickname",
+        description="User nickname.",
+    )
     pronoums: str = Field(
         None,
         title="Pronoums",
@@ -58,13 +69,14 @@ class User(BaseModel):
         for field in data:
             if hasattr(self, field) and data[field] is not None and field != "user_id":
                 setattr(self, field, data[field])
+            elif (
+                hasattr(self, field)
+                and data[field] is None
+                and field != "user_id"
+                and isinstance(field, str)
+            ):
+                setattr(self, field, "")
         self.updated_at = datetime.now()
-
-    def encode_password(self):
-        pass
-
-    def decode_password(self):
-        pass
 
 
 class UserCreate(BaseModel):
@@ -82,7 +94,27 @@ class UserCreate(BaseModel):
         description="User password.",
         min_length=8,
     )
-    hyperfocuses: list[str] = Field(
+    nickname: str = Field(
+        None,
+        title="Nickname",
+        description="User nickname.",
+    )
+    pronoums: str = Field(
+        None,
+        title="Pronoums",
+        description="User pronoums.",
+    )
+    profile_picture: str = Field(
+        None,
+        title="Profile picture",
+        description="User profile picture.",
+    )
+    avatar_picture: str = Field(
+        None,
+        title="Avatar picture",
+        description="User avatar picture.",
+    )
+    hyperfocus: list[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
     )
 
@@ -107,7 +139,7 @@ class UserPublic(BaseModel):
         title="Email",
         description="User email.",
     )
-    hyperfocuses: list[str] = Field(
+    hyperfocus: list[str] = Field(
         None, title="Hyperfocuses", description="User hyperfocuses IDs."
     )
 

@@ -47,7 +47,6 @@ class UserDB:
 
             response = []
             for user in users:
-                logger.info(f"Appending user: {user}")
                 user_dict = user._mapping
                 response.append(UserPublic(**user_dict))
         except Exception as exception:

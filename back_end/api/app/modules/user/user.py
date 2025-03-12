@@ -1,12 +1,13 @@
 import os
 from typing import List, Optional
 
-from fastapi import APIRouter, Body, Depends, Query, HTTPException
+from fastapi import APIRouter, Body, Depends, Query, Path, HTTPException
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
 from loguru import logger
 from sqlalchemy.orm import Session
 
+from app.modules.auth.services.auth_service import auth, check_token
 from app.modules.user.db.db import get_session as get_user_db
 from app.modules.user.models.user import (
     UserCreate,
@@ -34,10 +35,11 @@ env = os.environ["ENVIRONMENT"]
     "",
     response_model=UsersResponse,
 )
-def list_users(
+async def list_users(
     max_results: int = Query(20, description="Max results to return"),
     page_number: int = Query(1, description="Page number to return"),
     user_db: Session = Depends(get_user_db),
+    token: str = Depends(auth),
 ):
     try:
         users = UserService.list_users(
@@ -56,8 +58,12 @@ def list_users(
         HTTPStatus.CREATED: {"model": UserResponse},
     },
 )
-def create_user(user: UserCreate, user_db: Session = Depends(get_user_db)):
+async def create_user(
+    user: UserCreate = Body(..., title="User default input."),
+    user_db: Session = Depends(get_user_db),
+):
     try:
+        logger.info(f"Creating user: {user.to_dict()}")
         user_response = UserService.create_user(user=user, db=user_db)
     except Exception as exception:
         exception = format_error_response(exception)
@@ -67,11 +73,12 @@ def create_user(user: UserCreate, user_db: Session = Depends(get_user_db)):
 
 
 @router.get(
-    "",
+    "/{user_id}",
 )
-def get_user(
-    user_id: str = Query(..., description="User ID."),
+async def get_user(
+    user_id: str = Path(..., description="User ID."),
     user_db: Session = Depends(get_user_db),
+    token: str = Depends(auth),
 ):
     try:
         user_response = UserService.get_user(user_id=user_id, db=user_db)
@@ -85,10 +92,11 @@ def get_user(
 @router.put(
     "",
 )
-def update_user(
+async def update_user(
     user: UserCreate,
     user_id: str = Query(..., description="User ID."),
     user_db: Session = Depends(get_user_db),
+    token: str = Depends(auth),
 ):
     try:
         user_response = UserService.update_user(
@@ -104,9 +112,10 @@ def update_user(
 @router.delete(
     "",
 )
-def delete_user(
+async def delete_user(
     user_id: str = Query(..., description="User ID."),
     user_db: Session = Depends(get_user_db),
+    token: str = Depends(auth),
 ):
     try:
         user_response = UserService.delete_user(user_id=user_id, db=user_db)

@@ -44,11 +44,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     try {
-      const response = await axios.post(`${API_KEY}`, { email, password });
+      const url = `${API_KEY}` + '/auth/login'
+      const headers = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }}
+      const body = { 'grant_type': 'password', 'username': email, 'password': password }
+      const response = await axios.post(url, body, headers);
+      console.log(response.status)
+      console.log(response.data)
 
       if (response.status !== 200) throw new Error("Credenciais inválidas");
 
-      const { token } = response.data;
+      const { token } = response.data.message.access_token;
       await AsyncStorage.setItem("token", token);
 
       set({ isAuthenticated: true });

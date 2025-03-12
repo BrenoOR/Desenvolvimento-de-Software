@@ -65,7 +65,12 @@ export const useConnectionStore = create<ConnectionState>((set, get) => ({
 
     try {
       const payload = { hiperfocus: userHiperfocus, description, timing, connectionType };
-      const response = await axios.post(`${API_KEY}`, payload);
+      const response = await axios.post(`${API_KEY}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload,
+      });
 
       if (response.status === 200) {
         return true;
@@ -78,6 +83,7 @@ export const useConnectionStore = create<ConnectionState>((set, get) => ({
         return false;
       }
     } catch (error: any) {
+      console.log('Erro: ' + error)
       Toast.show({
         type: 'error',
         text1: error.response?.data?.error || 'Erro de conexão.',

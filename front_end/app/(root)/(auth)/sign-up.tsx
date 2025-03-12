@@ -14,7 +14,7 @@ import Toast from "react-native-toast-message";
 const SignUp = () => {
   const router = useRouter();
   
-  const { user_id, email, password, setForm, nextStep, submitForm } = useSignupStore();
+  const { username, email, password, setForm, nextStep, submitForm } = useSignupStore();
 
   const handleSubmit = async () => {
     const success = await submitForm(); 
@@ -40,8 +40,8 @@ const SignUp = () => {
           <View className="w-full gap-4">
             <FormField
               title="Nome"
-              value={user_id}
-              handleChangeText={(e: string) => setForm("user_id", e)}
+              value={username}
+              handleChangeText={(e: string) => setForm("username", e)}
               keyboardType="default"
               otherStyle="bg-gray200 opacity-[.40] rounded-xl border border-gray-700 p-2"
             />

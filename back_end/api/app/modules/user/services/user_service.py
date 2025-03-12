@@ -9,6 +9,7 @@ from app.modules.user.models.user import (
     UserCreate,
 )
 from app.modules.user.models.hyperfocus import HyperFocus
+from app.modules.auth.services.auth_service import AuthService
 
 
 class UserService:
@@ -37,36 +38,43 @@ class UserService:
         logger.info(f"Creating user: {user.username}")
         try:
             user_create = user.to_dict()
-            user_without_hyperfocuses = user_create.copy()
-            user_without_hyperfocuses.pop("hyperfocuses")
+            user_create["password"] = AuthService.get_password_hash(
+                user_create["password"]
+            )
             new_user = User()
             new_user.update(user_create)
             user = UserDB.create_user(new_user, db)
             logger.info(f"User created: {user.username}")
-            for hyperfocus_id in user_create["hyperfocuses"]:
-                hyperfocus = HyperFocusDB().get_hyperfocus(
-                    hyperfocus_id, db, raise_if_not_found=False
-                )
-                if hyperfocus is None:
-                    logger.info(f"Creating hyperfocus: {hyperfocus_id}")
-                    related_hyperfocuses = user_create.copy()["hyperfocuses"]
-                    h = {
-                        "name": hyperfocus_id.lower(),
-                        "description": f"Hyperfocus in {hyperfocus_id}",
-                        "tags": hyperfocus_id,
-                    }
-                    hyperfocus = HyperFocus(**h)
-                    for related_hyperfocus in related_hyperfocuses:
-                        hyperfocus.add_related_hyperfocus(related_hyperfocus.lower())
-                    HyperFocusDB.create_hyperfocus(
-                        hyperfocus=hyperfocus, db=db, raise_if_found=False
+            logger.info(
+                f"Creating hyperfocuses {user_create['hyperfocus']} for user: {user.username}"
+            )
+            if user_create["hyperfocus"] is not None:
+                for hyperfocus_id in user_create["hyperfocus"]:
+                    hyperfocus = HyperFocusDB().get_hyperfocus(
+                        hyperfocus_id, db, raise_if_not_found=False
                     )
-                logger.info(f"Adding user to hyperfocus: {hyperfocus_id}")
-                HyperFocusDB.add_user_to_hyperfocus(
-                    user_id=new_user.user_id,
-                    hyperfocus_id=hyperfocus_id.lower(),
-                    db=db,
-                )
+                    if hyperfocus is None:
+                        logger.info(f"Creating hyperfocus: {hyperfocus_id}")
+                        related_hyperfocus = user_create.copy()["hyperfocus"]
+                        h = {
+                            "name": hyperfocus_id.lower(),
+                            "description": f"Hyperfocus in {hyperfocus_id}",
+                            "tags": hyperfocus_id,
+                        }
+                        hyperfocus = HyperFocus(**h)
+                        for related_hyperfocus in related_hyperfocus:
+                            hyperfocus.add_related_hyperfocus(
+                                related_hyperfocus.lower()
+                            )
+                        HyperFocusDB.create_hyperfocus(
+                            hyperfocus=hyperfocus, db=db, raise_if_found=False
+                        )
+                    logger.info(f"Adding user to hyperfocus: {hyperfocus_id}")
+                    HyperFocusDB.add_user_to_hyperfocus(
+                        user_id=new_user.user_id,
+                        hyperfocus_id=hyperfocus_id.lower(),
+                        db=db,
+                    )
 
         except Exception as exception:
             logger.error(f"Error: {exception}")

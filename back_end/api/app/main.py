@@ -82,7 +82,7 @@ async def log_requests(request: Request, call_next):
 
 
 @app.get(f"/{env}/v1", tags=["Hello World"], summary="Hello World endpoint.")
-def root():
+async def root():
     """Hello World endpoint."""
     return {"message": "Hello World"}
 

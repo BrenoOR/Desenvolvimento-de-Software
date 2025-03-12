@@ -52,11 +52,12 @@ const Hiperfocus = () => {
             </View>
           </View>
           <View className='h-40 justify-end items-center'>
-          <Pressable className='w-64 h-20' onPress={handleSubmit}>
+          <Pressable className='w-64 h-20'>
               <CustomButton
                 text='Próximo'
                 color='bg-primary'
                 textColor='text-black'
+                onPress={handleSubmit}
               />
             </Pressable>
           </View>
