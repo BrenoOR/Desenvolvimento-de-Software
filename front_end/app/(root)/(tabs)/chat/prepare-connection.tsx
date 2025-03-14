@@ -20,10 +20,10 @@ const PrepareConnection = () => {
     }
   }, [hiperfocus]);
   //Tirar o mockInterest quando tiver com a API certinha
-//   const mockInterest = [
-//     { id: 1, name: "Desenho", user: "Ana" },
-//     { id: 2, name: "Música", user: "Ana" }
-//   ]
+  const mockInterest = [
+    { id: 1, name: "Desenho", user: "Ana" },
+    { id: 2, name: "Música", user: "Ana" }
+  ]
   
   const [changeInterest, setChangeInterest] = useState(false)
   const [selectedInterest, setSelectedInterest] = useState(mockInterest[0].id)
